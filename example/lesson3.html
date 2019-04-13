@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lesson1</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/three.js/r82/three.js"></script>
+</head>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+</style>
+
+<body>
+  <div id='app'>
+
+  </div>
+
+</body>
+<script>
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,1000);
+var renderer = new THREE.WebGLRenderer({
+  antialias:true//antialias:true/false是否开启反锯齿,
+});
+// renderer.shadowMapSoft = true;
+renderer.setClearColor(0xEEEEEE);
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.shadowMapEnabled = true;
+// 灯光 AmbientLight 环境光 PointLight 点光源 DirectionalLight 平行光 SpotLight 聚光灯
+var light = new THREE.SpotLight(0xffffff);
+light.position.set(-40, 60, -10);
+light.castShadow = true;
+scene.add(light)
+// 辅助坐标系
+var axes = new THREE.AxisHelper(20);
+// 蓝：z轴
+// 红：x轴
+// 绿：y轴
+scene.add(axes);
+// 平面
+var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
+var planeMaterial = new THREE.MeshLambertMaterial({color:0xffffff})
+var plane = new THREE.Mesh(planeGeometry, planeMaterial) ;
+plane.rotation.x = -Math.PI/2;
+plane.position.x = 15;
+plane.position.y= 0;
+plane.position.z =0;
+plane.receiveShadow = true;
+scene.add(plane);
+// 画球
+var spheraGeometry = new THREE.SphereGeometry(2,300,300);
+// 材质 MeshLambertMaterial 和 MeshPhongMaterial , MeshBasicMaterial;
+var spheraMaterial = new THREE.MeshLambertMaterial({color:0xff0000,wireframe:true})
+var sphere = new THREE.Mesh(spheraGeometry,spheraMaterial);
+
+sphere.position.x = 20;
+sphere.position.y = 4;
+sphere.position.z = 2;
+sphere.castShadow = true;
+scene.add(sphere);
+camera.position.set(-30,40,30);
+// camera.position.set(0,0,30);
+camera.lookAt(scene.position)
+
+document.querySelector('#app').append(renderer.domElement);
+renderer.render(scene,camera);
+</script>
+
+</html>
